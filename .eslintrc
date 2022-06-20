@@ -1,7 +1,14 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "react-hooks", "react", "react-native", "simple-import-sort", "jsx-expressions"],
+  "plugins": [
+    "@typescript-eslint",
+    "react-hooks",
+    "react",
+    "react-native",
+    "simple-import-sort",
+    "jsx-expressions"
+  ],
   "parserOptions": {
     "project": "./tsconfig.json",
     "sourceType": "module"
@@ -12,12 +19,7 @@
     "react-native/split-platform-components": "error",
     "react-native/no-inline-styles": "error",
     "react-native/no-color-literals": "error",
-    "react-native/no-raw-text": [
-        "error",
-      {
-        "skip": ["Typography", "Button"]
-      }
-    ],
+    "react-native/no-raw-text": "error",
     "react-native/no-single-element-style-arrays": "error",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
@@ -32,14 +34,14 @@
     "react/no-deprecated": "error",
     "react/no-unsafe": "error",
     "react/jsx-filename-extension": [
-        "error",
+      "error",
       {
         "extensions": [".tsx"]
       }
     ],
     "react/function-component-definition": "error",
     "react/jsx-sort-props": [
-        "error",
+      "error",
       {
         "callbacksLast": true,
         "shorthandFirst": true,
@@ -70,8 +72,22 @@
     "@typescript-eslint/no-misused-new": "error",
     "@typescript-eslint/no-misused-promises": "error",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
+    "@typescript-eslint/no-non-null-assertion": "error",
+    "@typescript-eslint/no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "react-native",
+            "importNames": ["SafeAreaView"],
+            "message": "Please import 'SafeAreaView' from 'react-native-safe-area-context' instead."
+          }
+        ]
+      }
+    ],
     "@typescript-eslint/no-require-imports": "error",
     "@typescript-eslint/no-this-alias": "error",
+    "@typescript-eslint/no-throw-literal": "error",
     "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
     "@typescript-eslint/no-unnecessary-condition": "error",
     "@typescript-eslint/no-unnecessary-type-arguments": "error",
@@ -107,7 +123,7 @@
     "@typescript-eslint/require-await": "error",
     "@typescript-eslint/return-await": "error",
     "@typescript-eslint/naming-convention": [
-        "error",
+      "error",
       {
         "selector": "default",
         "format": ["camelCase", "PascalCase"]
@@ -141,6 +157,7 @@
     "no-var": "error",
     "prefer-const": "error",
     "prefer-arrow-callback": "error",
+    "prefer-promise-reject-errors": "error",
     "constructor-super": "error",
     "prefer-destructuring": "error",
     "no-delete-var": "error",
