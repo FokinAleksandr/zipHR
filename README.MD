@@ -1,9 +1,9 @@
-# zipHR/NYTimes app
+# ZipHR/NYTimes app
 
 ## Setup
 
 1) Follow instructions here: https://reactnative.dev/docs/environment-setup
-2`npm install && npx pod-install` and you're ready to go
+2) `npm install && npx pod-install` and you're ready to go
 
 ## Run
 

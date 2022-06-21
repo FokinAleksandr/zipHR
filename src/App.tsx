@@ -3,6 +3,7 @@ import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
+import { storage } from '~/src/mmkv';
 import { Article, ArticleImage, Articles, ArticleTitle, PublishedByText } from '~/src/ui/articles';
 import { Header } from '~/src/ui/Header';
 import { Input } from '~/src/ui/Input';
@@ -32,14 +33,25 @@ const sections = scrollViewSections.flat();
 type SectionsType = ArrayElement<typeof sections>;
 
 export function App() {
-  const [selectedSection, setSection] = React.useState<SectionsType>('home');
+  const [selectedSection, setSection] = React.useState<SectionsType>(() => {
+    const preservedSectionFromPreviousSession = storage.getString('selectedSection');
+    if (preservedSectionFromPreviousSession) {
+      return preservedSectionFromPreviousSession as SectionsType;
+    }
+    return 'home';
+  });
   const [keywords, setKeywords] = React.useState('');
   const [location, setLocation] = React.useState('');
   const { data, status } = useArticles(selectedSection, keywords, location);
 
   const renderSection = (section: SectionsType) => {
+    const handleSectionPress = () => {
+      setSection(section);
+      storage.set('selectedSection', section);
+    };
+
     return (
-      <Section isSelected={selectedSection === section} onPress={() => setSection(section)}>
+      <Section isSelected={selectedSection === section} onPress={handleSectionPress}>
         <SectionText
           isSelected={selectedSection === section}
           numberOfLines={1}
@@ -57,8 +69,8 @@ export function App() {
     }
 
     return data.map(item => (
-      <Article key={item.title}>
-        <ArticleImage source={{ uri: item.multimedia[0].url }} />
+      <Article key={item.url}>
+        {item.multimedia && <ArticleImage source={{ uri: item.multimedia[0].url }} />}
         <FlexGrow>
           <ArticleTitle>{item.title}</ArticleTitle>
           <View>
