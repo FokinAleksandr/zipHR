@@ -1,42 +1,24 @@
-import styled from '@emotion/native';
 import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import type { SectionType } from '~/src/entities/sections';
+import { uiSections } from '~/src/entities/sections';
 import { storage } from '~/src/mmkv';
 import { Article, ArticleImage, Articles, ArticleTitle, PublishedByText } from '~/src/ui/articles';
-import { Header } from '~/src/ui/Header';
+import { InputFilters } from '~/src/ui/Filters';
+import { Header, HeaderTitle } from '~/src/ui/Header';
 import { Input } from '~/src/ui/Input';
+import { FlexGrow } from '~/src/ui/layout';
+import { ScreenWrapper } from '~/src/ui/ScreenWrapper';
 import { Section, Sections, SectionsWrapper, SectionText, SectionTitle } from '~/src/ui/sections';
 import { useArticles } from '~/src/useArticles';
 
-import type { ArrayElement } from './utils';
-
-const scrollViewSections = [
-  ['home', 'world'],
-  ['arts', 'automobiles'],
-  ['books', 'business'],
-  ['fashion', 'food'],
-  ['insider', 'magazine'],
-  ['movies', 'nyregion'],
-  ['obituaries', 'opinion'],
-  ['politics', 'realestate'],
-  ['science', 'sports'],
-  ['sundayreview', 'technology'],
-  ['theater', 't-magazine'],
-  ['travel', 'upshot'],
-  ['us', 'health'],
-] as const;
-
-const sections = scrollViewSections.flat();
-
-type SectionsType = ArrayElement<typeof sections>;
-
 export function App() {
-  const [selectedSection, setSection] = React.useState<SectionsType>(() => {
+  const [selectedSection, setSection] = React.useState<SectionType>(() => {
     const preservedSectionFromPreviousSession = storage.getString('selectedSection');
     if (preservedSectionFromPreviousSession) {
-      return preservedSectionFromPreviousSession as SectionsType;
+      return preservedSectionFromPreviousSession as SectionType;
     }
     return 'home';
   });
@@ -44,7 +26,7 @@ export function App() {
   const [location, setLocation] = React.useState('');
   const { data, status } = useArticles(selectedSection, keywords, location);
 
-  const renderSection = (section: SectionsType) => {
+  const renderSection = (section: SectionType) => {
     const handleSectionPress = () => {
       setSection(section);
       storage.set('selectedSection', section);
@@ -95,14 +77,14 @@ export function App() {
 
   return (
     <SafeAreaProvider>
-      <Wrapper edges={['top']}>
+      <ScreenWrapper edges={['top']}>
         <Header>
           <HeaderTitle>NYT News Feed</HeaderTitle>
         </Header>
         <SectionsWrapper>
           <SectionTitle>Section</SectionTitle>
           <Sections horizontal showsHorizontalScrollIndicator={false}>
-            {scrollViewSections.map(section => (
+            {uiSections.map(section => (
               <View key={section.toString()}>
                 {renderSection(section[0])}
                 {renderSection(section[1])}
@@ -110,7 +92,7 @@ export function App() {
             ))}
           </Sections>
         </SectionsWrapper>
-        <Filters>
+        <InputFilters>
           <Input
             autoCapitalize="none"
             placeholder="LOCATION"
@@ -123,29 +105,9 @@ export function App() {
             value={keywords}
             onChangeText={setKeywords}
           />
-        </Filters>
+        </InputFilters>
         <Articles>{renderArticles()}</Articles>
-      </Wrapper>
+      </ScreenWrapper>
     </SafeAreaProvider>
   );
 }
-
-const Wrapper = styled(SafeAreaView)`
-  flex: 1;
-  background-color: rgb(96, 133, 247);
-`;
-
-const HeaderTitle = styled.Text`
-  font-size: 28px;
-  color: white;
-`;
-
-const Filters = styled.View`
-  background-color: rgb(133, 191, 223);
-  flex-direction: row;
-  padding: 12px 0 12px 12px;
-`;
-
-const FlexGrow = styled.View`
-  flex: 1;
-`;
