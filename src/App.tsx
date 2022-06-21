@@ -1,13 +1,14 @@
 import styled from '@emotion/native';
 import React from 'react';
-import { ActivityIndicator, StatusBar, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-import { Article, ArticleImage, Articles, ArticleTitle, PublishedByText } from './ui/articles';
-import { Header } from './ui/Header';
-import { Input } from './ui/Input';
-import { Section, Sections, SectionsWrapper, SectionText, SectionTitle } from './ui/sections';
-import { useArticles } from './useArticles';
+import { Article, ArticleImage, Articles, ArticleTitle, PublishedByText } from '~/src/ui/articles';
+import { Header } from '~/src/ui/Header';
+import { Input } from '~/src/ui/Input';
+import { Section, Sections, SectionsWrapper, SectionText, SectionTitle } from '~/src/ui/sections';
+import { useArticles } from '~/src/useArticles';
+
 import type { ArrayElement } from './utils';
 
 const scrollViewSections = [
