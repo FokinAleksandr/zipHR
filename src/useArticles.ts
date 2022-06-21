@@ -1,48 +1,76 @@
 import React from 'react';
 
+import type { ArticleType } from '~/src/entities/article';
 import type { SectionType } from '~/src/entities/sections';
-
-type ArticleType = {
-  section: string;
-  subsection: string;
-  title: string;
-  abstract: string;
-  url: string;
-  uri: string;
-  byline: string;
-  item_type: string;
-  updated_date: string;
-  created_date: string;
-  published_date: string;
-  material_type_facet: string;
-  kicker: string;
-  des_facet: unknown[];
-  org_facet: unknown[];
-  per_facet: unknown[];
-  geo_facet: unknown[];
-  multimedia:
-    | {
-        url: string;
-        format: string;
-        height: number;
-        width: number;
-        type: string;
-        subtype: string;
-        caption: string;
-        copyright: string;
-      }[]
-    | null;
-  short_url: string;
-};
+import { sections } from '~/src/entities/sections';
 
 const apiKey = 'WQ5uHonHIwdNXA2zfJtibvJ2wQWLbPyM';
 
+type BackendCacheType = Record<
+  SectionType,
+  {
+    status: 'loading' | 'success' | 'error';
+    articles: ArticleType[];
+  }
+>;
+
+type ActionType =
+  | {
+      type: 'fetchSuccessful';
+      payload: { section: SectionType; articles: ArticleType[] };
+    }
+  | { type: 'fetchError'; payload: SectionType }
+  | { type: 'startLoading'; payload: SectionType };
+
+function reducer(state: BackendCacheType, { type, payload }: ActionType): BackendCacheType {
+  switch (type) {
+    case 'startLoading':
+      return {
+        ...state,
+        [payload]: {
+          ...state[payload],
+          status: 'loading',
+        },
+      };
+    case 'fetchSuccessful':
+      return {
+        ...state,
+        [payload.section]: {
+          status: 'success',
+          articles: payload.articles,
+        },
+      };
+    case 'fetchError':
+      return {
+        ...state,
+        [payload]: {
+          ...state[payload],
+          status: 'error',
+        },
+      };
+    default:
+      throw new Error();
+  }
+}
+
+const backendCache = {} as BackendCacheType;
+
+for (const section of sections) {
+  backendCache[section] = {
+    status: 'success',
+    articles: [],
+  };
+}
+
 export function useArticles(section: SectionType, keywords: string, location: string) {
-  const [data, setData] = React.useState<ArticleType[]>([]);
-  const [status, setStatus] = React.useState<'loading' | 'success' | 'error'>('loading');
+  const [data, dispatch] = React.useReducer(reducer, backendCache);
 
   React.useEffect(() => {
-    setStatus('loading');
+    dispatch({
+      type: 'startLoading',
+      payload: section,
+    });
+
     fetch(`https://api.nytimes.com/svc/topstories/v2/${section}.json?api-key=${apiKey}`)
       .then(res => {
         if (!res.ok) {
@@ -51,20 +79,26 @@ export function useArticles(section: SectionType, keywords: string, location: st
         return res.json();
       })
       .then((res: { results: ArticleType[] }) => {
-        setData(res.results);
-        setStatus('success');
+        dispatch({
+          type: 'fetchSuccessful',
+          payload: {
+            section,
+            articles: res.results.filter(article => article.title && article.byline),
+          },
+        });
       })
       .catch(() => {
-        setData([]);
-        setStatus('error');
+        dispatch({
+          type: 'fetchError',
+          payload: section,
+        });
       });
   }, [section]);
 
   return {
-    data: data
-      .filter(article => article.title && article.byline)
+    data: data[section].articles
       .filter(article => article.abstract.toLowerCase().includes(keywords.toLowerCase()))
       .filter(article => article.subsection.toLowerCase().includes(location.toLowerCase())),
-    status,
+    status: data[section].status,
   };
 }
