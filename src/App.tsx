@@ -79,6 +79,8 @@ export function App() {
     if (status === 'error') {
       return <Text>Something went wrong</Text>;
     }
+
+    return <Text>No data</Text>;
   };
 
   return (

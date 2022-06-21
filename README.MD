@@ -20,3 +20,19 @@ Choose any option:
 
 Start by launching your emulator with commands, `emulator -list-avds` and `emulator -avd [avd-name]`
 Then `npm run android`
+
+
+## Offline support:
+
+Is implemented by caching data from backend and only showing error and loading state when no articles were fetched. So basically
+we fetch data in the background and users always see cached data.
+
+```js
+const state = {status: 'loading', articles: [/*length > 0*/]} //-> show articles anyway 
+const state = {status: 'error', articles: [/*length > 0*/]} //-> show articles anyway  
+const state = {status: 'success', articles: [/*length > 0*/]} //-> show articles anyway
+
+const state = {status: 'loading', articles: [/*length === 0*/]} //-> show loader (1st fetch) 
+const state = {status: 'error', articles: [/*length === 0*/]} //-> show error in ui (1st fetch failed)  
+const state = {status: 'success', articles: [/*length === 0*/]} //-> show zero state in ui
+```
