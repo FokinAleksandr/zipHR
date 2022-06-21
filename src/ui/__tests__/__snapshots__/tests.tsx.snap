@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot tests Header 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "height": 56,
+        "justifyContent": "center",
+        "paddingLeft": 12,
+        "width": "100%",
+      },
+      undefined,
+    ]
+  }
+/>
+`;
