@@ -125,10 +125,6 @@
     "@typescript-eslint/naming-convention": [
       "error",
       {
-        "selector": "default",
-        "format": ["camelCase", "PascalCase"]
-      },
-      {
         "selector": ["typeLike"],
         "format": ["StrictPascalCase"]
       },
