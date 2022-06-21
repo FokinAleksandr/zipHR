@@ -1,5 +1,83 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`snapshot tests ArticleImage 1`] = `
+<Image
+  source={
+    Object {
+      "uri": "https://static01.nyt.com/images/2022/06/17/business/17Adviser-illo/17Adviser-illo-thumbLarge.jpg",
+    }
+  }
+  style={
+    Array [
+      Object {
+        "height": 100,
+        "marginRight": 8,
+        "width": 100,
+      },
+      undefined,
+    ]
+  }
+/>
+`;
+
+exports[`snapshot tests ArticleImage 2`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "white",
+        "borderBottomLeftRadius": 6,
+        "borderBottomRightRadius": 6,
+        "borderTopLeftRadius": 6,
+        "borderTopRightRadius": 6,
+        "flexDirection": "row",
+        "marginBottom": 12,
+        "paddingBottom": 12,
+        "paddingLeft": 12,
+        "paddingRight": 12,
+        "paddingTop": 12,
+      },
+      undefined,
+    ]
+  }
+/>
+`;
+
+exports[`snapshot tests ArticleTitle 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "fontSize": 16,
+        "fontWeight": "500",
+      },
+      undefined,
+    ]
+  }
+>
+  Some title
+</Text>
+`;
+
+exports[`snapshot tests Articles 1`] = `
+<RCTScrollView
+  style={
+    Array [
+      Object {
+        "backgroundColor": "rgb(138, 206, 224)",
+        "paddingBottom": 12,
+        "paddingLeft": 12,
+        "paddingRight": 12,
+        "paddingTop": 12,
+      },
+      undefined,
+    ]
+  }
+>
+  <View />
+</RCTScrollView>
+`;
+
 exports[`snapshot tests Header 1`] = `
 <View
   style={
@@ -14,4 +92,24 @@ exports[`snapshot tests Header 1`] = `
     ]
   }
 />
+`;
+
+exports[`snapshot tests PublishedByText 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "flexShrink": 1,
+        "flexWrap": "wrap",
+        "marginBottom": 4,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "marginTop": 8,
+      },
+      undefined,
+    ]
+  }
+>
+  Published by somebody
+</Text>
 `;
