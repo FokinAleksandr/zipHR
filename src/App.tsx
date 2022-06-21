@@ -46,33 +46,39 @@ export function App() {
   };
 
   const renderArticles = () => {
+    if (data.length) {
+      return data.map(item => (
+        <Article key={item.url}>
+          {item.multimedia && <ArticleImage source={{ uri: item.multimedia[0].url }} />}
+          <FlexGrow>
+            <ArticleTitle>{item.title}</ArticleTitle>
+            <View>
+              <PublishedByText numberOfLines={2} ellipsizeMode="tail">
+                {item.byline}
+              </PublishedByText>
+            </View>
+            <Text>
+              Published:{' '}
+              {new Date(item.published_date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+              })}
+            </Text>
+          </FlexGrow>
+        </Article>
+      ));
+    }
+
     if (status === 'loading') {
       return <ActivityIndicator size="large" />;
     }
 
-    return data.map(item => (
-      <Article key={item.url}>
-        {item.multimedia && <ArticleImage source={{ uri: item.multimedia[0].url }} />}
-        <FlexGrow>
-          <ArticleTitle>{item.title}</ArticleTitle>
-          <View>
-            <PublishedByText numberOfLines={2} ellipsizeMode="tail">
-              {item.byline}
-            </PublishedByText>
-          </View>
-          <Text>
-            Published:{' '}
-            {new Date(item.published_date).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'numeric',
-              day: 'numeric',
-              hour: 'numeric',
-              minute: 'numeric',
-            })}
-          </Text>
-        </FlexGrow>
-      </Article>
-    ));
+    if (status === 'error') {
+      return <Text>Something went wrong</Text>;
+    }
   };
 
   return (

@@ -16,6 +16,6 @@ export const uiSections = [
   ['us', 'health'],
 ] as const;
 
-const sections = uiSections.flat();
+export const sections = uiSections.flat();
 
 export type SectionType = ArrayElement<typeof sections>;
