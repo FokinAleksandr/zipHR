@@ -27,7 +27,7 @@ type ArticleType = {
     subtype: string;
     caption: string;
     copyright: string;
-  }[];
+  }[] | null;
   short_url: string;
 }
 
@@ -55,6 +55,7 @@ export function useArticles(section: string, keywords: string, location: string)
 
   return {
     data: data
+      .filter(article => article.title && article.byline)
       .filter(article => article.abstract.toLowerCase().includes(keywords.toLowerCase()))
       .filter(article => article.subsection.toLowerCase().includes(location.toLowerCase())),
     status
