@@ -6,3 +6,8 @@ export const Header = styled.View`
   height: 56px;
   width: 100%;
 `;
+
+export const HeaderTitle = styled.Text`
+  font-size: 28px;
+  color: white;
+`;

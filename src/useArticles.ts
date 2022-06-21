@@ -1,5 +1,7 @@
 import React from 'react';
 
+import type { SectionType } from '~/src/entities/sections';
+
 type ArticleType = {
   section: string;
   subsection: string;
@@ -18,39 +20,44 @@ type ArticleType = {
   org_facet: unknown[];
   per_facet: unknown[];
   geo_facet: unknown[];
-  multimedia: {
-    url: string;
-    format: string;
-    height: number;
-    width: number;
-    type: string;
-    subtype: string;
-    caption: string;
-    copyright: string;
-  }[] | null;
+  multimedia:
+    | {
+        url: string;
+        format: string;
+        height: number;
+        width: number;
+        type: string;
+        subtype: string;
+        caption: string;
+        copyright: string;
+      }[]
+    | null;
   short_url: string;
-}
+};
 
 const apiKey = 'WQ5uHonHIwdNXA2zfJtibvJ2wQWLbPyM';
 
-export function useArticles(section: string, keywords: string, location: string) {
+export function useArticles(section: SectionType, keywords: string, location: string) {
   const [data, setData] = React.useState<ArticleType[]>([]);
   const [status, setStatus] = React.useState<'loading' | 'success' | 'error'>('loading');
 
   React.useEffect(() => {
     setStatus('loading');
-    fetch(`https://api.nytimes.com/svc/topstories/v2/${section}.json?api-key=${apiKey}`).then(res => {
-      if (!res.ok) {
-        return Promise.reject(res);
-      }
-      return res.json();
-    }).then((res: { results: ArticleType[] }) => {
-      setData(res.results);
-      setStatus('success');
-    }).catch(() => {
-      setData([]);
-      setStatus('error');
-    });
+    fetch(`https://api.nytimes.com/svc/topstories/v2/${section}.json?api-key=${apiKey}`)
+      .then(res => {
+        if (!res.ok) {
+          return Promise.reject(res);
+        }
+        return res.json();
+      })
+      .then((res: { results: ArticleType[] }) => {
+        setData(res.results);
+        setStatus('success');
+      })
+      .catch(() => {
+        setData([]);
+        setStatus('error');
+      });
   }, [section]);
 
   return {
@@ -58,6 +65,6 @@ export function useArticles(section: string, keywords: string, location: string)
       .filter(article => article.title && article.byline)
       .filter(article => article.abstract.toLowerCase().includes(keywords.toLowerCase()))
       .filter(article => article.subsection.toLowerCase().includes(location.toLowerCase())),
-    status
+    status,
   };
 }
